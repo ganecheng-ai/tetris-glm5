@@ -43,13 +43,3 @@ SCORE_PER_LINE = {
     3: 500,
     4: 800,
 }
-
-# 控制键
-KEY_LEFT = 'left'
-KEY_RIGHT = 'right'
-KEY_UP = 'up'
-KEY_DOWN = 'down'
-KEY_SPACE = 'space'
-KEY_P = 'p'
-KEY_R = 'r'
-KEY_ESCAPE = 'escape'

@@ -281,7 +281,6 @@ class Renderer:
             block: 方块对象
             x: x坐标
             y: y坐标
-            block_type: 方块类型
         """
         preview_size = 20
         for dx, dy in block.SHAPES[block.block_type][0]:

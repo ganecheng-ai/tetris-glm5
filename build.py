@@ -18,7 +18,6 @@ def build():
         "--onefile",
         "--windowed",
         "--clean",
-        f"--add-data={os.path.join(current_dir, 'assets')}:assets",
     ]
 
     # macOS 特定参数
