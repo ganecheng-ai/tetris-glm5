@@ -83,7 +83,9 @@ jobs:
       - name: Prepare release files
         run: |
           mkdir -p release
-          find artifacts -type f -exec cp {} release/ \;
+          cp artifacts/tetris-windows-x64.exe/tetris.exe release/tetris-windows-x64.exe
+          cp artifacts/tetris-linux-x64/tetris release/tetris-linux-x64
+          cp artifacts/tetris-macos-x64/tetris release/tetris-macos-x64
           cd release
           sha256sum * > checksums.txt
 
