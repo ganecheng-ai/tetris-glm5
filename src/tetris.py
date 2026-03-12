@@ -1,16 +1,13 @@
 # -*- coding: utf-8 -*-
 """俄罗斯方块游戏主程序"""
 import sys
-import os
-
-# 添加src目录到路径
-sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import pygame
-from src.game import Game
-from src.renderer import Renderer
-from src.logger import logger
-from src.sound import sound_manager
+
+from .game import Game
+from .renderer import Renderer
+from .logger import logger
+from .sound import sound_manager
 
 
 def main():

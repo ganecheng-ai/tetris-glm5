@@ -253,36 +253,43 @@ class Renderer:
             game: 游戏对象
         """
         sidebar_x = GRID_X_OFFSET + GRID_WIDTH * BLOCK_SIZE + 30
+        y_offset = GRID_Y_OFFSET
 
         # 绘制下一个方块
-        self._draw_text("下一个:", sidebar_x, GRID_Y_OFFSET, self.font_medium)
+        self._draw_text("下一个:", sidebar_x, y_offset, self.font_medium)
         if game.next_block:
-            self._draw_preview_block(game.next_block, sidebar_x + 20, GRID_Y_OFFSET + 40)
+            self._draw_preview_block(game.next_block, sidebar_x + 20, y_offset + 35)
 
         # 绘制保持方块
-        self._draw_text("保持:", sidebar_x, GRID_Y_OFFSET + 150, self.font_medium)
+        y_offset += 90
+        self._draw_text("保持:", sidebar_x, y_offset, self.font_medium)
         if game.hold_block:
-            self._draw_preview_block(game.hold_block, sidebar_x + 20, GRID_Y_OFFSET + 190)
+            self._draw_preview_block(game.hold_block, sidebar_x + 20, y_offset + 35)
 
         # 绘制分数
-        self._draw_text("分数:", sidebar_x, GRID_Y_OFFSET + 250, self.font_medium)
-        self._draw_text(str(game.score), sidebar_x, GRID_Y_OFFSET + 285, self.font_large)
+        y_offset += 80
+        self._draw_text("分数:", sidebar_x, y_offset, self.font_medium)
+        self._draw_text(str(game.score), sidebar_x, y_offset + 30, self.font_large)
 
         # 绘制等级
-        self._draw_text("等级:", sidebar_x, GRID_Y_OFFSET + 350, self.font_medium)
-        self._draw_text(str(game.level), sidebar_x, GRID_Y_OFFSET + 385, self.font_large)
+        y_offset += 80
+        self._draw_text("等级:", sidebar_x, y_offset, self.font_medium)
+        self._draw_text(str(game.level), sidebar_x, y_offset + 30, self.font_large)
 
         # 绘制消除行数
-        self._draw_text("消除:", sidebar_x, GRID_Y_OFFSET + 450, self.font_medium)
-        self._draw_text(str(game.lines_cleared), sidebar_x, GRID_Y_OFFSET + 485, self.font_large)
+        y_offset += 80
+        self._draw_text("消除:", sidebar_x, y_offset, self.font_medium)
+        self._draw_text(str(game.lines_cleared), sidebar_x, y_offset + 30, self.font_large)
 
         # 绘制最高分
-        self._draw_text("最高:", sidebar_x, GRID_Y_OFFSET + 550, self.font_medium)
+        y_offset += 80
+        self._draw_text("最高:", sidebar_x, y_offset, self.font_medium)
         top_score = high_score_manager.get_top_score()
-        self._draw_text(str(top_score), sidebar_x, GRID_Y_OFFSET + 585, self.font_medium)
+        self._draw_text(str(top_score), sidebar_x, y_offset + 30, self.font_medium)
 
-        # 绘制控制说明
-        self._draw_controls(sidebar_x, GRID_Y_OFFSET + 650)
+        # 绘制控制说明（紧凑布局，确保不超出窗口）
+        y_offset += 70
+        self._draw_controls(sidebar_x, y_offset)
 
     def _draw_preview_block(self, block: Block, x: int, y: int):
         """绘制预览方块
@@ -358,12 +365,14 @@ class Renderer:
             "M 音效"
         ]
 
+        # 使用紧凑的行高确保不超出窗口
+        line_height = 15
         for i, text in enumerate(controls):
-            self._draw_text(text, x, y + i * 18, self.font_small, (180, 180, 200))
+            self._draw_text(text, x, y + i * line_height, self.font_small, (180, 180, 200))
 
         # 显示音效状态
         sound_status = "开" if self.sound_enabled else "关"
-        self._draw_text(f"音效: {sound_status}", x, y + len(controls) * 18 + 5,
+        self._draw_text(f"音效: {sound_status}", x, y + len(controls) * line_height + 3,
                         self.font_small,
                         (150, 200, 150) if self.sound_enabled else (200, 150, 150))
 

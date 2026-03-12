@@ -51,13 +51,6 @@ pip install -r requirements.txt
 python -m src.tetris
 ```
 
-或者
-
-```bash
-cd src
-python tetris.py
-```
-
 ## 📦 下载
 
 请访问 [Releases](https://github.com/ganecheng-ai/tetris-glm5/releases) 页面下载最新版本的可执行文件。
