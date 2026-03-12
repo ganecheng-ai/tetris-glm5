@@ -9,7 +9,7 @@ from .constants import (
     WINDOW_WIDTH, WINDOW_HEIGHT, GRID_WIDTH, GRID_HEIGHT,
     BLOCK_SIZE, GRID_X_OFFSET, GRID_Y_OFFSET, COLORS,
     BACKGROUND_COLOR, GRID_BG_COLOR, GRID_LINE_COLOR,
-    TEXT_COLOR, BORDER_COLOR
+    TEXT_COLOR, BORDER_COLOR, FPS
 )
 from .game import Game
 from .blocks import Block
@@ -409,4 +409,4 @@ class Renderer:
         Returns:
             经过的毫秒数
         """
-        return self.clock.tick(60)
+        return self.clock.tick(FPS)
