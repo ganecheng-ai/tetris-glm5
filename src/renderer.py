@@ -1,8 +1,10 @@
 # -*- coding: utf-8 -*-
 """渲染器模块"""
-import pygame
 import os
 from typing import Optional, List, Tuple
+
+import pygame
+
 from .constants import (
     WINDOW_WIDTH, WINDOW_HEIGHT, GRID_WIDTH, GRID_HEIGHT,
     BLOCK_SIZE, GRID_X_OFFSET, GRID_Y_OFFSET, COLORS,
@@ -54,7 +56,7 @@ class Renderer:
             if os.path.exists(font_path):
                 try:
                     return pygame.font.Font(font_path, size)
-                except:
+                except (OSError, pygame.error):
                     continue
 
         # 回退到默认字体

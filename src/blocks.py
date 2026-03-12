@@ -2,6 +2,8 @@
 """方块定义模块"""
 from typing import List, Tuple
 
+from .constants import COLORS
+
 
 class Block:
     """方块类"""
@@ -97,7 +99,6 @@ class Block:
         Returns:
             RGB颜色元组
         """
-        from .constants import COLORS
         return COLORS[self.block_type]
 
     def copy(self) -> 'Block':
