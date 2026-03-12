@@ -265,24 +265,24 @@ class Renderer:
             self._draw_preview_block(game.hold_block, sidebar_x + 20, GRID_Y_OFFSET + 190)
 
         # 绘制分数
-        self._draw_text("分数:", sidebar_x, GRID_Y_OFFSET + 300, self.font_medium)
-        self._draw_text(str(game.score), sidebar_x, GRID_Y_OFFSET + 335, self.font_large)
+        self._draw_text("分数:", sidebar_x, GRID_Y_OFFSET + 250, self.font_medium)
+        self._draw_text(str(game.score), sidebar_x, GRID_Y_OFFSET + 285, self.font_large)
 
         # 绘制等级
-        self._draw_text("等级:", sidebar_x, GRID_Y_OFFSET + 400, self.font_medium)
-        self._draw_text(str(game.level), sidebar_x, GRID_Y_OFFSET + 435, self.font_large)
+        self._draw_text("等级:", sidebar_x, GRID_Y_OFFSET + 350, self.font_medium)
+        self._draw_text(str(game.level), sidebar_x, GRID_Y_OFFSET + 385, self.font_large)
 
         # 绘制消除行数
-        self._draw_text("消除:", sidebar_x, GRID_Y_OFFSET + 500, self.font_medium)
-        self._draw_text(str(game.lines_cleared), sidebar_x, GRID_Y_OFFSET + 535, self.font_large)
+        self._draw_text("消除:", sidebar_x, GRID_Y_OFFSET + 450, self.font_medium)
+        self._draw_text(str(game.lines_cleared), sidebar_x, GRID_Y_OFFSET + 485, self.font_large)
 
         # 绘制最高分
-        self._draw_text("最高:", sidebar_x, GRID_Y_OFFSET + 600, self.font_medium)
+        self._draw_text("最高:", sidebar_x, GRID_Y_OFFSET + 550, self.font_medium)
         top_score = high_score_manager.get_top_score()
-        self._draw_text(str(top_score), sidebar_x, GRID_Y_OFFSET + 635, self.font_medium)
+        self._draw_text(str(top_score), sidebar_x, GRID_Y_OFFSET + 585, self.font_medium)
 
         # 绘制控制说明
-        self._draw_controls(sidebar_x, GRID_Y_OFFSET + 600)
+        self._draw_controls(sidebar_x, GRID_Y_OFFSET + 650)
 
     def _draw_preview_block(self, block: Block, x: int, y: int):
         """绘制预览方块
