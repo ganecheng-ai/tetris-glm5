@@ -1,7 +1,7 @@
 # -*- coding: utf-8 -*-
 """渲染器模块"""
 import os
-from typing import Optional, List, Tuple
+from typing import Tuple
 
 import pygame
 

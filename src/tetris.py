@@ -9,7 +9,6 @@ sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 import pygame
 from src.game import Game
 from src.renderer import Renderer
-from src.constants import INITIAL_FALL_SPEED
 from src.logger import logger
 
 
@@ -19,7 +18,6 @@ def main():
     game = Game()
 
     fall_time = 0
-    fall_speed = INITIAL_FALL_SPEED
 
     running = True
     while running:

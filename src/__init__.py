@@ -3,8 +3,7 @@
 from .game import Game
 from .blocks import Block
 from .renderer import Renderer
-from .constants import *
 from .logger import logger
 
-__version__ = "1.0.6"
+__version__ = "1.0.7"
 __all__ = ["Game", "Block", "Renderer", "logger"]
