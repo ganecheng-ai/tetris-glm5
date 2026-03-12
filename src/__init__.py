@@ -5,5 +5,5 @@ from .blocks import Block
 from .renderer import Renderer
 from .constants import *
 
-__version__ = "1.0.3"
+__version__ = "1.0.4"
 __all__ = ["Game", "Block", "Renderer"]
