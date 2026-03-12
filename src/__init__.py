@@ -6,5 +6,5 @@ from .renderer import Renderer
 from .logger import logger
 from .sound import sound_manager
 
-__version__ = "1.0.9"
+__version__ = "1.0.10"
 __all__ = ["Game", "Block", "Renderer", "logger", "sound_manager"]

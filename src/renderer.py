@@ -298,7 +298,8 @@ class Renderer:
             self._draw_small_gradient_block(surface, color, preview_size)
             self.screen.blit(surface, rect)
 
-    def _draw_small_gradient_block(self, surface: pygame.Surface, color: Tuple[int, int, int], size: int):
+    def _draw_small_gradient_block(self, surface: pygame.Surface,
+                                   color: Tuple[int, int, int], size: int):
         """绘制小尺寸渐变方块
 
         Args:

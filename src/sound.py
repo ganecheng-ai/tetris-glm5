@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 """音效系统模块"""
+import array
 import math
 from typing import Optional
 
@@ -93,7 +94,6 @@ class SoundManager:
             buf.append(value)
 
         # 创建立体声音频
-        import array
         sound_array = array.array('h', buf)
 
         try:
