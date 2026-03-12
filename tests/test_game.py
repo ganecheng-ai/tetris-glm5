@@ -2,12 +2,16 @@
 """游戏逻辑单元测试"""
 import sys
 import os
+import tempfile
+import json
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
 
 import unittest
+from unittest.mock import patch
 from src.game import Game
 from src.blocks import Block
 from src.constants import GRID_WIDTH, GRID_HEIGHT, INITIAL_FALL_SPEED
+from src.high_score import HighScoreManager
 
 
 class TestBlock(unittest.TestCase):
@@ -229,6 +233,105 @@ class TestGame(unittest.TestCase):
         self.assertFalse(game.paused)
         self.assertIsNone(game.hold_block)
         self.assertTrue(game.can_hold)
+
+
+class TestHighScoreManager(unittest.TestCase):
+    """高分管理器测试"""
+
+    def setUp(self):
+        """测试前准备"""
+        # 使用临时目录进行测试
+        self.temp_dir = tempfile.mkdtemp()
+
+    def tearDown(self):
+        """测试后清理"""
+        import shutil
+        shutil.rmtree(self.temp_dir, ignore_errors=True)
+
+    def test_add_score(self):
+        """测试添加分数"""
+        manager = HighScoreManager()
+        manager.scores = []  # 清空已有记录
+        manager._data_dir = self.temp_dir
+        manager._score_file = os.path.join(self.temp_dir, 'high_scores.json')
+
+        rank = manager.add_score(100, 1, 10)
+        self.assertEqual(rank, 1)
+        self.assertEqual(len(manager.scores), 1)
+        self.assertEqual(manager.get_top_score(), 100)
+
+    def test_score_ranking(self):
+        """测试分数排名"""
+        manager = HighScoreManager()
+        manager.scores = []
+        manager._data_dir = self.temp_dir
+        manager._score_file = os.path.join(self.temp_dir, 'high_scores.json')
+
+        manager.add_score(100, 1, 10)
+        rank = manager.add_score(200, 2, 20)
+        self.assertEqual(rank, 1)  # 200分应该排第一
+        self.assertEqual(manager.get_top_score(), 200)
+
+    def test_max_scores_limit(self):
+        """测试最大记录数限制"""
+        manager = HighScoreManager()
+        manager.scores = []
+        manager._data_dir = self.temp_dir
+        manager._score_file = os.path.join(self.temp_dir, 'high_scores.json')
+
+        # 添加超过最大限制的记录
+        for i in range(15):
+            manager.add_score(i * 10, 1, 1)
+
+        self.assertEqual(len(manager.scores), manager.MAX_SCORES)
+
+    def test_is_high_score(self):
+        """测试判断是否为高分"""
+        manager = HighScoreManager()
+        manager.scores = []
+        manager._data_dir = self.temp_dir
+        manager._score_file = os.path.join(self.temp_dir, 'high_scores.json')
+
+        # 空列表时任何分数都是高分
+        self.assertTrue(manager.is_high_score(10))
+
+        # 添加一些分数
+        for i in range(manager.MAX_SCORES):
+            manager.add_score(100 * (i + 1), 1, 1)
+
+        # 更高的分数是高分
+        self.assertTrue(manager.is_high_score(10000))
+        # 更低的分数不是高分
+        self.assertFalse(manager.is_high_score(10))
+
+    def test_clear_scores(self):
+        """测试清除分数"""
+        manager = HighScoreManager()
+        manager.scores = []
+        manager._data_dir = self.temp_dir
+        manager._score_file = os.path.join(self.temp_dir, 'high_scores.json')
+
+        manager.add_score(100, 1, 10)
+        manager.clear_scores()
+        self.assertEqual(len(manager.scores), 0)
+        self.assertEqual(manager.get_top_score(), 0)
+
+    def test_persistence(self):
+        """测试分数持久化"""
+        manager1 = HighScoreManager()
+        manager1.scores = []
+        manager1._data_dir = self.temp_dir
+        manager1._score_file = os.path.join(self.temp_dir, 'high_scores.json')
+
+        manager1.add_score(500, 5, 50)
+
+        # 创建新实例应该加载之前保存的分数
+        manager2 = HighScoreManager()
+        manager2._data_dir = self.temp_dir
+        manager2._score_file = os.path.join(self.temp_dir, 'high_scores.json')
+        manager2._load_scores()
+
+        self.assertEqual(manager2.get_top_score(), 500)
 
 
 if __name__ == '__main__':

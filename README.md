@@ -12,6 +12,7 @@
 - 👻 幽灵方块预览落点
 - 📦 支持保持方块功能
 - 📊 分数、等级、消行统计
+- 🏆 高分记录持久化保存
 - 📝 完善的日志系统
 - 🔊 合成音效系统（支持开关）
 - 🖥️ 跨平台支持 (Windows, Linux, macOS)
@@ -86,8 +87,10 @@ tetris-glm5/
 │   ├── renderer.py       # 渲染器
 │   ├── constants.py      # 常量定义
 │   ├── logger.py         # 日志系统
-│   └── sound.py          # 音效系统
+│   ├── sound.py          # 音效系统
+│   └── high_score.py     # 高分系统
 ├── logs/                  # 日志文件目录
+├── data/                  # 游戏数据（高分记录）
 ├── assets/
 │   └── fonts/            # 字体文件
 ├── tests/

@@ -9,6 +9,7 @@ from .constants import (
 )
 from .logger import logger
 from .sound import sound_manager
+from .high_score import high_score_manager
 
 
 class Game:
@@ -29,6 +30,7 @@ class Game:
         self.paused = False
         self.hold_block: Optional[Block] = None
         self.can_hold = True
+        self.high_score_rank = 0
 
         # 初始化方块
         self._spawn_block()
@@ -50,6 +52,10 @@ class Game:
             self.game_over = True
             sound_manager.play('game_over')
             logger.game_over(self.score, self.level, self.lines_cleared)
+            # 记录高分
+            self.high_score_rank = high_score_manager.add_score(
+                self.score, self.level, self.lines_cleared
+            )
 
     def _create_random_block(self) -> Block:
         """创建随机方块
@@ -279,6 +285,7 @@ class Game:
         self.paused = False
         self.hold_block: Optional[Block] = None
         self.can_hold = True
+        self.high_score_rank = 0
         self._spawn_block()
         logger.game_start()
 

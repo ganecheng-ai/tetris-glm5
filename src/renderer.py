@@ -14,6 +14,7 @@ from .constants import (
 from .game import Game
 from .blocks import Block
 from .sound import sound_manager
+from .high_score import high_score_manager
 
 
 class Renderer:
@@ -168,7 +169,7 @@ class Renderer:
 
         # 绘制游戏状态
         if game.game_over:
-            self._draw_game_over()
+            self._draw_game_over(game)
         elif game.paused:
             self._draw_paused()
 
@@ -275,6 +276,11 @@ class Renderer:
         self._draw_text("消除:", sidebar_x, GRID_Y_OFFSET + 500, self.font_medium)
         self._draw_text(str(game.lines_cleared), sidebar_x, GRID_Y_OFFSET + 535, self.font_large)
 
+        # 绘制最高分
+        self._draw_text("最高:", sidebar_x, GRID_Y_OFFSET + 600, self.font_medium)
+        top_score = high_score_manager.get_top_score()
+        self._draw_text(str(top_score), sidebar_x, GRID_Y_OFFSET + 635, self.font_medium)
+
         # 绘制控制说明
         self._draw_controls(sidebar_x, GRID_Y_OFFSET + 600)
 
@@ -369,8 +375,12 @@ class Renderer:
         """
         self.sound_enabled = enabled
 
-    def _draw_game_over(self):
-        """绘制游戏结束界面"""
+    def _draw_game_over(self, game: Game):
+        """绘制游戏结束界面
+
+        Args:
+            game: 游戏对象
+        """
         # 半透明遮罩
         overlay = pygame.Surface((WINDOW_WIDTH, WINDOW_HEIGHT), pygame.SRCALPHA)
         overlay.fill((0, 0, 0, 180))
@@ -378,12 +388,26 @@ class Renderer:
 
         # 游戏结束文字
         text = self.font_large.render("游戏结束", True, (255, 50, 50))
-        text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 50))
+        text_rect = text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 80))
         self.screen.blit(text, text_rect)
+
+        # 显示最终分数
+        score_text = self.font_medium.render(f"分数: {game.score}", True, (255, 255, 255))
+        score_rect = score_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 - 30))
+        self.screen.blit(score_text, score_rect)
+
+        # 显示排名（如果进入排行榜）
+        if game.high_score_rank > 0:
+            rank_color = (255, 215, 0)  # 金色
+            rank_text = self.font_medium.render(
+                f"排名 #{game.high_score_rank}", True, rank_color
+            )
+            rank_rect = rank_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 10))
+            self.screen.blit(rank_text, rank_rect)
 
         # 重新开始提示
         restart_text = self.font_medium.render("按 R 重新开始", True, (255, 255, 255))
-        restart_rect = restart_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 20))
+        restart_rect = restart_text.get_rect(center=(WINDOW_WIDTH // 2, WINDOW_HEIGHT // 2 + 60))
         self.screen.blit(restart_text, restart_rect)
 
     def _draw_paused(self):
