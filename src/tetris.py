@@ -10,6 +10,7 @@ import pygame
 from src.game import Game
 from src.renderer import Renderer
 from src.logger import logger
+from src.sound import sound_manager
 
 
 def main():
@@ -53,6 +54,10 @@ def main():
                         game.toggle_pause()
                     elif event.key == pygame.K_r:
                         game.restart()
+                    elif event.key == pygame.K_m:
+                        # 切换音效开关
+                        sound_enabled = sound_manager.toggle()
+                        renderer.set_sound_enabled(sound_enabled)
 
         # 自动下落
         if not game.paused and not game.game_over:

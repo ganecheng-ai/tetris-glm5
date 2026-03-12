@@ -8,6 +8,7 @@ from .constants import (
     MIN_FALL_SPEED, SPEED_DECREASE, SCORE_PER_LINE
 )
 from .logger import logger
+from .sound import sound_manager
 
 
 class Game:
@@ -47,6 +48,7 @@ class Game:
         # 检查是否可以放置
         if not self._can_place(self.current_block):
             self.game_over = True
+            sound_manager.play('game_over')
             logger.game_over(self.score, self.level, self.lines_cleared)
 
     def _create_random_block(self) -> Block:
@@ -106,6 +108,12 @@ class Game:
             # 记录消除行
             logger.lines_cleared(num_lines, self.score)
 
+            # 播放消行音效
+            if num_lines == 4:
+                sound_manager.play('tetris')
+            else:
+                sound_manager.play('clear')
+
             # 更新等级和速度
             old_level = self.level
             self.level = self.lines_cleared // 10 + 1
@@ -116,6 +124,7 @@ class Game:
 
             # 记录等级提升
             if self.level > old_level:
+                sound_manager.play('level_up')
                 logger.level_up(self.level)
 
             # 清除行并下移
@@ -136,6 +145,7 @@ class Game:
         if not self._can_place(self.current_block):
             self.current_block.move(1, 0)
             return False
+        sound_manager.play('move')
         return True
 
     def move_right(self) -> bool:
@@ -151,6 +161,7 @@ class Game:
         if not self._can_place(self.current_block):
             self.current_block.move(-1, 0)
             return False
+        sound_manager.play('move')
         return True
 
     def move_down(self) -> bool:
@@ -186,6 +197,7 @@ class Game:
         for dx, dy in kicks:
             self.current_block.move(dx, dy)
             if self._can_place(self.current_block):
+                sound_manager.play('rotate')
                 return True
             self.current_block.move(-dx, -dy)
 
@@ -201,6 +213,7 @@ class Game:
         while self._can_place(self.current_block):
             self.current_block.move(0, 1)
         self.current_block.move(0, -1)
+        sound_manager.play('drop')
         self._lock_block()
 
     def hold(self) -> bool:

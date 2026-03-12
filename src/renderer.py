@@ -13,6 +13,7 @@ from .constants import (
 )
 from .game import Game
 from .blocks import Block
+from .sound import sound_manager
 
 
 class Renderer:
@@ -24,6 +25,9 @@ class Renderer:
         self.screen = pygame.display.set_mode((WINDOW_WIDTH, WINDOW_HEIGHT))
         pygame.display.set_caption("俄罗斯方块 - Tetris")
         self.clock = pygame.time.Clock()
+
+        # 音效状态
+        self.sound_enabled = sound_manager.enabled
 
         # 加载字体
         self.font_large = self._load_font(48)
@@ -103,9 +107,9 @@ class Renderer:
             max(0, b - 80),
         )
         pygame.draw.line(surface, shadow_color, (BLOCK_SIZE - 2, 2),
-                        (BLOCK_SIZE - 2, BLOCK_SIZE - 2), 2)
+                         (BLOCK_SIZE - 2, BLOCK_SIZE - 2), 2)
         pygame.draw.line(surface, shadow_color, (2, BLOCK_SIZE - 2),
-                        (BLOCK_SIZE - 2, BLOCK_SIZE - 2), 2)
+                         (BLOCK_SIZE - 2, BLOCK_SIZE - 2), 2)
 
         # 绘制边框
         pygame.draw.rect(surface, (0, 0, 0), (0, 0, BLOCK_SIZE, BLOCK_SIZE), 1)
@@ -141,13 +145,13 @@ class Renderer:
         for x in range(GRID_WIDTH + 1):
             start_pos = (GRID_X_OFFSET + x * BLOCK_SIZE, GRID_Y_OFFSET)
             end_pos = (GRID_X_OFFSET + x * BLOCK_SIZE,
-                      GRID_Y_OFFSET + GRID_HEIGHT * BLOCK_SIZE)
+                       GRID_Y_OFFSET + GRID_HEIGHT * BLOCK_SIZE)
             pygame.draw.line(self.screen, GRID_LINE_COLOR, start_pos, end_pos)
 
         for y in range(GRID_HEIGHT + 1):
             start_pos = (GRID_X_OFFSET, GRID_Y_OFFSET + y * BLOCK_SIZE)
             end_pos = (GRID_X_OFFSET + GRID_WIDTH * BLOCK_SIZE,
-                      GRID_Y_OFFSET + y * BLOCK_SIZE)
+                       GRID_Y_OFFSET + y * BLOCK_SIZE)
             pygame.draw.line(self.screen, GRID_LINE_COLOR, start_pos, end_pos)
 
         # 绘制已固定的方块
@@ -343,11 +347,26 @@ class Renderer:
             "空格 硬降",
             "C 保持",
             "P 暂停",
-            "R 重开"
+            "R 重开",
+            "M 音效"
         ]
 
         for i, text in enumerate(controls):
             self._draw_text(text, x, y + i * 18, self.font_small, (180, 180, 200))
+
+        # 显示音效状态
+        sound_status = "开" if self.sound_enabled else "关"
+        self._draw_text(f"音效: {sound_status}", x, y + len(controls) * 18 + 5,
+                        self.font_small,
+                        (150, 200, 150) if self.sound_enabled else (200, 150, 150))
+
+    def set_sound_enabled(self, enabled: bool):
+        """设置音效状态显示
+
+        Args:
+            enabled: 是否启用音效
+        """
+        self.sound_enabled = enabled
 
     def _draw_game_over(self):
         """绘制游戏结束界面"""
