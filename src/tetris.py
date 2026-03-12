@@ -10,6 +10,7 @@ import pygame
 from src.game import Game
 from src.renderer import Renderer
 from src.constants import INITIAL_FALL_SPEED
+from src.logger import logger
 
 
 def main():
@@ -66,6 +67,8 @@ def main():
         # 渲染
         renderer.render(game)
 
+    # 记录游戏退出
+    logger.exit()
     pygame.quit()
     sys.exit()
 

@@ -1,12 +1,13 @@
 # -*- coding: utf-8 -*-
 """游戏逻辑模块"""
 import random
-from typing import List, Tuple, Optional, Set
+from typing import List, Tuple, Optional
 from .blocks import Block
 from .constants import (
     GRID_WIDTH, GRID_HEIGHT, INITIAL_FALL_SPEED,
     MIN_FALL_SPEED, SPEED_DECREASE, SCORE_PER_LINE
 )
+from .logger import logger
 
 
 class Game:
@@ -31,6 +32,9 @@ class Game:
         # 初始化方块
         self._spawn_block()
 
+        # 记录游戏开始
+        logger.game_start()
+
     def _spawn_block(self):
         """生成新方块"""
         if self.next_block is None:
@@ -43,6 +47,7 @@ class Game:
         # 检查是否可以放置
         if not self._can_place(self.current_block):
             self.game_over = True
+            logger.game_over(self.score, self.level, self.lines_cleared)
 
     def _create_random_block(self) -> Block:
         """创建随机方块
@@ -98,12 +103,20 @@ class Game:
             self.score += SCORE_PER_LINE.get(num_lines, num_lines * 100)
             self.lines_cleared += num_lines
 
+            # 记录消除行
+            logger.lines_cleared(num_lines, self.score)
+
             # 更新等级和速度
+            old_level = self.level
             self.level = self.lines_cleared // 10 + 1
             self.fall_speed = max(
                 MIN_FALL_SPEED,
                 INITIAL_FALL_SPEED - (self.level - 1) * SPEED_DECREASE
             )
+
+            # 记录等级提升
+            if self.level > old_level:
+                logger.level_up(self.level)
 
             # 清除行并下移
             for y in lines_to_clear:
@@ -214,6 +227,7 @@ class Game:
             self.current_block.y = 0
 
         self.can_hold = False
+        logger.hold_block(current_type)
         return True
 
     def update(self) -> bool:
@@ -231,10 +245,29 @@ class Game:
         """切换暂停状态"""
         if not self.game_over:
             self.paused = not self.paused
+            if self.paused:
+                logger.pause()
+            else:
+                logger.resume()
 
     def restart(self):
         """重新开始游戏"""
-        self.__init__()
+        logger.restart()
+        self.grid: List[List[Optional[str]]] = [
+            [None for _ in range(GRID_WIDTH)] for _ in range(GRID_HEIGHT)
+        ]
+        self.current_block: Optional[Block] = None
+        self.next_block: Optional[Block] = None
+        self.score = 0
+        self.level = 1
+        self.lines_cleared = 0
+        self.fall_speed = INITIAL_FALL_SPEED
+        self.game_over = False
+        self.paused = False
+        self.hold_block: Optional[Block] = None
+        self.can_hold = True
+        self._spawn_block()
+        logger.game_start()
 
     def get_ghost_position(self) -> List[Tuple[int, int]]:
         """获取幽灵方块位置（预览落点）

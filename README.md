@@ -12,6 +12,7 @@
 - 👻 幽灵方块预览落点
 - 📦 支持保持方块功能
 - 📊 分数、等级、消行统计
+- 📝 完善的日志系统
 - 🖥️ 跨平台支持 (Windows, Linux, macOS)
 
 ## 🎯 操作说明
@@ -81,7 +82,9 @@ tetris-glm5/
 │   ├── blocks.py         # 方块定义
 │   ├── game.py           # 游戏逻辑
 │   ├── renderer.py       # 渲染器
-│   └── constants.py      # 常量定义
+│   ├── constants.py      # 常量定义
+│   └── logger.py         # 日志系统
+├── logs/                  # 日志文件目录
 ├── assets/
 │   └── fonts/            # 字体文件
 ├── tests/
